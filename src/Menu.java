@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
@@ -8,144 +9,173 @@ public class Menu {
     public Menu() {
 
 
-    }
-    public void showGame() throws IOException {
-        File dictionary = new File("src/english2.txt");
 
-        Scanner textScanner = new Scanner(dictionary);
-        Scanner input = new Scanner(System.in);
+        System.out.println(getString());
 
-        ArrayList<String> words = new ArrayList<>();
-        while(textScanner.hasNextLine()) {
-            words.add(textScanner.nextLine());
-        }
-        String hiddenText = words.get((int)(Math.random()* words.size()));
-        char[] textArray = hiddenText.toCharArray();
+        File playerData = new File("C:\\Users\\henni\\IdeaProjects\\Hangman11\\src\\PlayerData.txt");
 
-        char[] myAnswers = new char[textArray.length];
-        for(int i = 0; i < textArray.length; i++){
-            myAnswers[i] = '?';
-        }
 
-        boolean finished = false;
-        int lives = 6;
 
-        while(!finished) {
-            System.out.println(hiddenText);
-            System.out.println("*********************");
+        boolean running;
+        running = true;
+        show();
+        while (running){
 
-            String letter = input.next();
-            // check for a valid input
-            while(letter.length() != 1 || Character.isDigit(letter.charAt(0))){
-                System.out.println("Error Input - Try again");
-                letter = input.next();
+// behöver veta lite hur man kopplar playerdata med textdocument mm.
+            // vad ska stå i main? kan man ha player där???
+            //hur gör man så spelare sparas och så man kan välja dom? (vi vill inte att den ska overwrite)
+
+            switch (getInt(1,5)){
+                case 1:
+                    System.out.println(); // starta spelet och känna av att du har valt en spelare
+                    break;
+                case 2:
+                    readFromFIle(playerData); // ska kunna välja spelare
+                    running = false;
+                    break;
+                case 3:
+                    writeToFile(playerData); // ska kunna säga vilken spelare som du lägger till
+                    show();
+                    break;
+                case 4:
+                    playerStats(); // vill vill komma åt den här datan från write och read också
+
+                case 5:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("felaktig input");
+                    break;
             }
-            //check if letter is in the word
-            boolean found = false;
-            for(int i = 0; i < textArray.length; i++) {
-                if(letter.charAt(0) == textArray[i]) {
-                    myAnswers[i] = textArray[i];
-                    found = true;
+        }
+    }
+
+
+    public static void show() {
+        // detta ska visa menyn
+        System.out.println();
+        System.out.println("1. Start game!");
+        System.out.println("2. Chose your character");
+        System.out.println("3. Make new character");
+        System.out.println("4. Character stats");
+        System.out.println("5. Quit");
+
+    }
+    public static void readFromFIle(File playerData) {
+
+        try {
+
+            Scanner reader = new Scanner(playerData);
+
+            int counter = 0;
+            while (reader.hasNextLine()) {
+                counter++;
+                reader.nextLine();
+            }
+            reader = new Scanner(playerData);
+
+            String[] fileContent = new String[counter];
+
+
+            for (int i = 0; i < counter; i++) {
+                fileContent[i] = reader.nextLine();
+                System.out.println(i + ". " + fileContent[i]); // är det här okej???
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+        public static void writeToFile(File playerData) {
+            System.out.println("Type in new player name!");
+            System.out.print("> ");
+            String[] names = {"Bill", "Niklas", "Lahoud", "Sahra", "Anuka", "Ahmed", "Henning"}; //den här kanske behöver ändras
+
+            try {
+
+                PrintWriter writer = new PrintWriter(playerData);
+
+
+                for (int i = 0; i < names.length; i++) {
+                    writer.println(names[i]);
                 }
-            }
-            if(!found){
-                lives--;
+                Scanner keyboard = new Scanner(System.in);
+                String player = keyboard.nextLine();
+                writer.println(player);
 
-                System.out.println("Wrong letter");
-            }
-            boolean done = true;
-            for (char myAnswer : myAnswers) {
-                if (myAnswer == '?') {
-                    System.out.print(" _");
-                    done = false;
-                } else {
-                    System.out.print(" " + myAnswer);
-                }
-            }
-            System.out.println("\n" + "Lives left: " + lives);
-            drawHangman(lives);
-
-            //check if the game ends
-            if(done) {
-                System.out.println("Congrats :D You found a letter");
-                finished = true;
-
-            }
-            if(lives <= 0) {
-                System.out.println("you are dead!");
-                finished = true;
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("IOexception");
             }
         }
+
+        public static void playerStats(){
+            Player[] players = new Player [7];
+
+            players[0] = new Player("Bill", 0, 0, 0);
+            players[1] = new Player("Niklas", 0, 0, 0);
+            players[2] = new Player("Lahoud", 0, 0, 0);
+            players[3] = new Player("Sahra", 0, 0, 0);
+            players[4] = new Player("Anuka", 0, 0, 0);
+            players[5] = new Player("Ahmed", 0, 0, 0);
+            players[6] = new Player("Henning", 0, 0, 0);
+
+            System.out.println(players[0].getName());
+            System.out.println(players[0].getRounds());
+            System.out.println(players[0].getWins());
+            System.out.println(players[0].getLosses());
+            System.out.println();
+            System.out.println(players[1].getName());
+            System.out.println(players[1].getRounds());
+            System.out.println(players[1].getWins());
+            System.out.println(players[1].getLosses());
+            System.out.println();
+            System.out.println(players[2].getName());
+            System.out.println(players[2].getRounds());
+            System.out.println(players[2].getWins());
+            System.out.println(players[2].getLosses());
+            System.out.println();
+            System.out.println(players[3].getName());
+            System.out.println(players[3].getRounds());
+            System.out.println(players[3].getWins());
+            System.out.println(players[3].getLosses());
+            System.out.println();
+            System.out.println(players[4].getName());
+            System.out.println(players[4].getRounds());
+            System.out.println(players[4].getWins());
+            System.out.println(players[4].getLosses());
+            System.out.println();
+            System.out.println(players[5].getName());
+            System.out.println(players[5].getRounds());
+            System.out.println(players[5].getWins());
+            System.out.println(players[5].getLosses());
+            System.out.println();
+            System.out.println(players[6].getName());
+            System.out.println(players[6].getRounds());
+            System.out.println(players[6].getWins());
+            System.out.println(players[6].getLosses());
+            System.out.println();
+        }
+//      b a _ a _
+
+    public static String getString(){ //ska ta inputs från spelet
+        String s;
+        s = "Welcome to Hangman";
+        return s;
     }
-    public static void drawHangman(int l) {
-        if(l == 6) {
-            System.out.println("|----------");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-        }
-        else if(l == 5) {
-            System.out.println("|----------");
-            System.out.println("|    O");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-        }
-        else if(l == 4) {
-            System.out.println("|----------");
-            System.out.println("|    O");
-            System.out.println("|    |");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-        }
-        else if(l == 3) {
-            System.out.println("|----------");
-            System.out.println("|    O");
-            System.out.println("|   -|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-        }
-        else if(l == 2) {
-            System.out.println("|----------");
-            System.out.println("|    O");
-            System.out.println("|   -|-");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-        }
-        else if(l == 1) {
-            System.out.println("|----------");
-            System.out.println("|    O");
-            System.out.println("|   -|-");
-            System.out.println("|   /");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-        }
-        else{
-            System.out.println("|----------");
-            System.out.println("|    O");
-            System.out.println("|   -|-");
-            System.out.println("|   /|");
-            System.out.println("|");
-            System.out.println("|");
-            System.out.println("|");
-        }
+    public static int getInt(int min, int max){
+    Scanner menuScanner = new Scanner(System.in);
+
+    int x = menuScanner.nextInt();
+
+        return x;
+    }
+    public static char getAlpha(){
+
+        return 0;
     }
 
-
-    public static String update(String Alpha) {
-
-        return "";
     }
-}
+
