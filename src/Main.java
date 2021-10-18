@@ -18,9 +18,9 @@ import java.util.Scanner;
                     Menu.show();
 
 
-                    System.out.println("vill du avsluta?");
+                    System.out.println("do you want to end?");
                     String svar = in.next();
-                    if(svar.equals("ja")){
+                    if(svar.equals("Yes")){
                         playing = false;
 
                /* Player[] players = new Player [7];

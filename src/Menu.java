@@ -6,13 +6,14 @@ import java.util.Scanner;
 import java.io.File;
 
 public class Menu {
+    ArrayList<Player>  playerArrayList = new ArrayList<Player>();
     public Menu() {
 
 
 
         System.out.println(getString());
 
-        File playerData = new File("C:\\Users\\henni\\IdeaProjects\\Hangman11\\src\\PlayerData.txt");
+        File playerData = new File("/Users/sahrabile/Documents/GitHub/Hangman/src/PlayerData.txt");
 
 
 
@@ -44,7 +45,7 @@ public class Menu {
                     running = false;
                     break;
                 default:
-                    System.out.println("felaktig input");
+                    System.out.println("incorrect input");
                     break;
             }
         }
@@ -61,26 +62,23 @@ public class Menu {
         System.out.println("5. Quit");
 
     }
-    public static void readFromFIle(File playerData) {
+    public void readFromFIle(File playerData) {
 
         try {
 
             Scanner reader = new Scanner(playerData);
 
-            int counter = 0;
             while (reader.hasNextLine()) {
-                counter++;
-                reader.nextLine();
+                String playerName = reader.nextLine();
+                int playerRound = Integer.parseInt(reader.nextLine());
+                int playerWins = Integer.parseInt(reader.nextLine());
+                int playerLosses = Integer.parseInt(reader.nextLine());
+                Player p = new Player(playerName, playerRound,playerWins, playerLosses);
+                System.out.println(p.toString());
+                //reader.nextLine();
+               this.playerArrayList.add(p);
             }
-            reader = new Scanner(playerData);
 
-            String[] fileContent = new String[counter];
-
-
-            for (int i = 0; i < counter; i++) {
-                fileContent[i] = reader.nextLine();
-                System.out.println(i + ". " + fileContent[i]); // är det här okej???
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,7 +105,7 @@ public class Menu {
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("IOexception");
+                System.out.println("IException");
             }
         }
 
@@ -160,19 +158,19 @@ public class Menu {
         }
 //      b a _ a _
 
-    public static String getString(){ //ska ta inputs från spelet
-        String s;
-        s = "Welcome to Hangman";
-        return s;
-    }
-    public static int getInt(int min, int max){
-    Scanner menuScanner = new Scanner(System.in);
+        public static String getString(){ //ska ta inputs från spelet
+           String s;
+          s = "Welcome to Hangman";
+          return s;
+     }
+      public static int getInt(int min, int max){
+       Scanner menuScanner = new Scanner(System.in);
 
-    int x = menuScanner.nextInt();
+       int x = menuScanner.nextInt();
 
-        return x;
-    }
-    public static char getAlpha(){
+         return x;
+     }
+       public static char getAlpha(char a, char aa){
 
         return 0;
     }
