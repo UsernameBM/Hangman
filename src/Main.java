@@ -15,7 +15,7 @@ import java.util.Scanner;
 
                     //kod här
 
-                    Menu.show();
+                    menu.show();
 
 
                     System.out.println("do you want to end?");

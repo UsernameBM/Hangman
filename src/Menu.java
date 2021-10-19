@@ -7,13 +7,16 @@ import java.io.File;
 
 public class Menu {
     ArrayList<Player>  playerArrayList = new ArrayList<Player>();
+    Player currentPlayer;
+
+
     public Menu() {
 
 
 
         System.out.println(getString());
 
-        File playerData = new File("/Users/sahrabile/Documents/GitHub/Hangman/src/PlayerData.txt");
+        File playerData = new File("src/PlayerData.txt");
 
 
 
@@ -40,7 +43,8 @@ public class Menu {
                     break;
                 case 4:
                     playerStats(); // vill vill komma åt den här datan från write och read också
-
+                    show();
+                    break;
                 case 5:
                     running = false;
                     break;
@@ -52,7 +56,7 @@ public class Menu {
     }
 
 
-    public static void show() {
+    public void show() {
         // detta ska visa menyn
         System.out.println();
         System.out.println("1. Start game!");
@@ -73,7 +77,7 @@ public class Menu {
                 int playerRound = Integer.parseInt(reader.nextLine());
                 int playerWins = Integer.parseInt(reader.nextLine());
                 int playerLosses = Integer.parseInt(reader.nextLine());
-                Player p = new Player(playerName, playerRound,playerWins, playerLosses);
+                Player p = new Player(playerName, playerRound, playerWins, playerLosses);
                 System.out.println(p.toString());
                 //reader.nextLine();
                this.playerArrayList.add(p);
@@ -85,22 +89,32 @@ public class Menu {
         }
     }
 
-        public static void writeToFile(File playerData) {
-            System.out.println("Type in new player name!");
+        public void writeToFile(File playerData) {
+            System.out.println("Add new player!");
             System.out.print("> ");
-            String[] names = {"Bill", "Niklas", "Lahoud", "Sahra", "Anuka", "Ahmed", "Henning"}; //den här kanske behöver ändras
+
 
             try {
-
+                Scanner saveData = new Scanner(playerData);
+                ArrayList<String> temp = new ArrayList<>();
+                while (saveData.hasNextLine()){
+                    temp.add(saveData.nextLine());
+                }
                 PrintWriter writer = new PrintWriter(playerData);
 
 
-                for (int i = 0; i < names.length; i++) {
-                    writer.println(names[i]);
-                }
+
                 Scanner keyboard = new Scanner(System.in);
                 String player = keyboard.nextLine();
-                writer.println(player);
+                this.currentPlayer = new Player(player, 0, 0, 0);
+
+                for (String s:temp
+                     ) {
+                    writer.println(s);
+
+                }
+
+                writer.println(this.currentPlayer.toString());
 
                 writer.close();
             } catch (IOException e) {
@@ -109,18 +123,22 @@ public class Menu {
             }
         }
 
-        public static void playerStats(){
-            Player[] players = new Player [7];
+        public void playerStats(){
+        try {
 
-            players[0] = new Player("Bill", 0, 0, 0);
-            players[1] = new Player("Niklas", 0, 0, 0);
-            players[2] = new Player("Lahoud", 0, 0, 0);
-            players[3] = new Player("Sahra", 0, 0, 0);
-            players[4] = new Player("Anuka", 0, 0, 0);
-            players[5] = new Player("Ahmed", 0, 0, 0);
-            players[6] = new Player("Henning", 0, 0, 0);
 
-            System.out.println(players[0].getName());
+            File playerD = new File("src/PlayerData.txt");
+            Scanner playerStat = new Scanner(playerD);
+            while (playerStat.hasNextLine()){
+                System.out.println(playerStat.nextLine());
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+
+          /*  System.out.println(players[0].getName());
             System.out.println(players[0].getRounds());
             System.out.println(players[0].getWins());
             System.out.println(players[0].getLosses());
@@ -155,22 +173,24 @@ public class Menu {
             System.out.println(players[6].getWins());
             System.out.println(players[6].getLosses());
             System.out.println();
+
+           */
         }
 //      b a _ a _
 
-        public static String getString(){ //ska ta inputs från spelet
+        public String getString(){ //ska ta inputs från spelet
            String s;
           s = "Welcome to Hangman";
           return s;
      }
-      public static int getInt(int min, int max){
+      public int getInt(int min, int max){
        Scanner menuScanner = new Scanner(System.in);
 
        int x = menuScanner.nextInt();
 
          return x;
      }
-       public static char getAlpha(char a, char aa){
+       public char getAlpha(char a, char aa){
 
         return 0;
     }

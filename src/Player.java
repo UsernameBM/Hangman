@@ -57,11 +57,10 @@ public class Player {
             System.out.println("Antalet omgångar körda: " + this.rounds);
             System.out.println("Antalet omgångar vunna: " + this.wins);
             System.out.println("Antalet omgångar förlorade " + this.losses);
-            return "Player{" + name +
-                    "rounds =" + rounds +
-                    ", wins" + wins +
-                    ", losses'" + losses +'\'' +
-            '}';
+            return  name + ": " +
+                    " Rounds:" + rounds +
+                    " Wins:" + wins +
+                    " Losses:" + losses;
         }
 
 
